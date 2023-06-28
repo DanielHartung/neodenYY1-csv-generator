@@ -17,7 +17,7 @@ if __name__ == '__main__':
 
     partlist = []
     for p in eaglef.parts:
-        part = Part()
+        part = YY1Part()
         part.designator = p.partname
         part.comment = p.value
         part.footprint = p.body
@@ -34,6 +34,7 @@ if __name__ == '__main__':
         partlist.append(part)
 
     g = Generator(partlist)
-    g.generate("","SmartBin")
+    g.verify_parts(machine, eaglef)
+    #g.generate("","SmartBin")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

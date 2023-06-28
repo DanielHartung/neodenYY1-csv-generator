@@ -1,0 +1,21 @@
+NEODEN,YY1,P&P FILE,,,,,,,,,,,
+,,,,,,,,,,,,,
+PanelizedPCB,UnitLength,0,UnitWidth,0,Rows,1,Columns,1,
+,,,,,,,,,,,,,
+Fiducial,1-X,5.0,1-Y,5.0,OverallOffsetX,0,OverallOffsetY,0,
+,,,,,,,,,,,,,
+NozzleChange,OFF,BeforeComponent,1,Head1,Drop,Station1,PickUp,Station1,
+NozzleChange,OFF,BeforeComponent,1,Head1,Drop,Station1,PickUp,Station1,
+NozzleChange,OFF,BeforeComponent,1,Head1,Drop,Station1,PickUp,Station1,
+NozzleChange,OFF,BeforeComponent,1,Head1,Drop,Station1,PickUp,Station1,
+,,,,,,,,,,,,,
+Designator,Comment,Footprint,Mid X(mm),Mid Y(mm) ,Rotation,Head ,FeederNo,Mount Speed(%),Pick Height(mm),Place Height(mm),Mode,Skip
+C1,0.47µ,C0805,6.35,48.26,270,1,1,100,0,0,1,1
+11.43,C0805,,48.90,0,0.1µ,1,1,100,0,0,1,1
+C3,22p,C0805,24.77,45.72,180,1,1,100,0,0,1,1
+IC3,74LVC1T45GW,SOT363,5.08,5.08,270,1,1,100,0,0,1,1
+IC4,74LVC1T45GW,SOT363,5.08,7.62,270,1,1,100,0,0,1,1
+R1,10k,R0805,5.71,10.16,180,1,1,100,0,0,1,1
+R2,10k,R0805,17.14,58.42,180,1,1,100,0,0,1,1
+R3,100k,R0805,28.58,53.98,180,1,1,100,0,0,1,1
+R4,10k,R0805,25.40,50.80,270,1,1,100,0,0,1,1

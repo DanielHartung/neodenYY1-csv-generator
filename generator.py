@@ -1,14 +1,5 @@
 from Part import *
-
-class nozzle:
-    use = False
-    component = 0
-    head = 1
-    drop_station = 0
-    pick_station = 0
-
-    def __init__(self):
-        pass
+from yy1 import nozzle
 
 class Generator:
     def __init__(self, partlist):
@@ -99,3 +90,41 @@ class Generator:
 
 
         f.close()
+
+    #partlist = []
+    #for p in eaglef.parts:
+    #    part = Part()
+    #    part.designator = p.partname
+    #    part.comment = p.value
+    #    part.footprint = p.body
+    #    part.mid_x = p.pos_x
+    #    part.mid_y = p.pos_y
+    #    part.rotation = p.rotation
+    #    part.head = 1
+    #    part.feeder = 1
+    #    part.speed = 100
+    #    part.pick_high = 0
+    #    part.place_high = 0
+    #    part.mode = 1
+    #    part.skip = False
+    #    partlist.append(part)
+
+    def verify_parts(self, machine: Machine, parts: EaglePart):
+        '''
+        verify if the parts are available on the machine
+        :param machine: machine object containing the feeder information
+        :param parts: placment parts from the file
+        :return:
+        '''
+
+        for part in self.parts:
+            # check value
+            for feeder in machine.parts:
+                if part.name == feeder.part_name:
+                    print('name match')
+
+            # check check package
+
+        # check name
+
+

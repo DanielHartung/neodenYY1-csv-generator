@@ -1,3 +1,6 @@
+# Important info  
+At the moment i focus on using Eagle mount files for the script and a csv file for the machine data.
+
 # Neoden YY1 CSV Generator  
 Goal of this Pyton script should be to generate the csv file for a Neoden YY1 Pick and Place machine.  
 TO reach the goal the idea is to have a csv file with all the parts that are one the machine.  
@@ -18,3 +21,10 @@ This file contains all the components of the parts on the yy1 machine:
 - part_speed = Speed in percet for placing the part  
 - part_mode = Placement mode for the part  
 - part_comment = Free comment filed
+
+# Generator  
+## verify parts agains machine parts  
+to place the correct parts on the board some variables should be compared to place the right parts  
+- part_name: is it a **R**esistor or a **C**apacitor  
+- part_value: is it the right value 10k  
+- part_package: is it the right package **0805** or **1205**

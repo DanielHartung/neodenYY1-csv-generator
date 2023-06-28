@@ -1,0 +1,6 @@
+feeder id,part,value,package,height,nozzle,speed,mode
+1,resistor,0,R0805,0,1,100,1
+2,capa,22,805,0,1,100,1
+3,Mega8,-,tqpf32,0,2,30,4
+4,Diode Universal,,SOD123,0,1,100,1
+5,,,,,,,

@@ -1,5 +1,14 @@
 import re
 
+class nozzle:
+    use = False
+    component = 0
+    head = 1
+    drop_station = 0
+    pick_station = 0
+
+    def __init__(self):
+        pass
 class Feeder:
     id = 0
     part_name = str('None')
@@ -13,9 +22,9 @@ class Feeder:
 
 class Machine:
     '''
-    File that contains all Feeder Information of the machine
+    File that contains all Feeder Information of the machine and all machine parameters
     '''
-    fedders = []
+    feeders = []
 
     def __init__(self):
         self.read_machine_file('machine.csv')
@@ -40,7 +49,7 @@ class Machine:
                 feeder.part_speed = result[6]
                 feeder.part_mode = result[7]
                 #feeder.part_comment = result[8]
-                self.fedders.append(feeder)
+                self.feeders.append(feeder)
 
     def write_machine_file(self):
         pass

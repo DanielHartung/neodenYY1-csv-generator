@@ -1,7 +1,7 @@
 import re
 from yy1 import *
 
-class Part:
+class YY1Part:
     designator = str("R1")
     comment = str("1k")
     footprint = str("0603D")
@@ -31,6 +31,30 @@ class EaglePart:
     rotation = 270
 
 
+class Fusion:
+    parts = []
+
+    def __init__(self, path):
+        self.parse(path)
+
+    def parse(self, path):
+        file1 = open(path, 'r')
+        Lines = file1.readlines()
+
+        for line in Lines:
+            result = re.search(r"(\S+);(\S+)\s+(\S+)\s(\S+)\s+(\S+)\s(.*)", line)
+
+            if (result):
+                part = EaglePart()
+                part.partname = result.group(1)
+                part.pos_x = result.group(2)
+                part.pos_y = result.group(3)
+                part.rotation = result.group(4)
+                part.value = result.group(5)
+                part.body = result.group(6)
+                self.parts.append(part)
+
+
 class EagleFile:
     parts = []
 
@@ -53,19 +77,3 @@ class EagleFile:
                 part.value = result.group(5)
                 part.body = result.group(6)
                 self.parts.append(part)
-
-    def verify_parts(self, machine:Machine):
-        '''
-        verify if the parts are available on the machine
-        :param machine: machine object containing the feeder information
-        :return:
-        '''
-
-        for part in self.parts:
-            #check package
-
-            #check value
-
-        pass
-
-
