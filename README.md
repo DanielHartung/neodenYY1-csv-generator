@@ -23,6 +23,16 @@ This file contains all the components of the parts on the yy1 machine:
 - part_comment = Free comment filed
 
 # Generator  
+
+# Placement list
+All Parts and the placement data should be in a comma separated file.  
+For Fusion 360 there is a ulp inside of the repo.  
+
+## Example of the file  
+Name, Value, Package, xpos, ypos, angle
+```
+R1,20k,C0805,12.05,08.65,90
+```
 ## verify parts agains machine parts  
 to place the correct parts on the board some variables should be compared to place the right parts  
 - part_name: is it a **R**esistor or a **C**apacitor  

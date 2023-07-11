@@ -1,0 +1,54 @@
+#usage "<b>Data generation for YY1 mounting machines</b>\n"
+       "<p>"
+       "Generates a file that can be used the yy1 csv generator "
+       "The x- and y- coordinates (units: mm) are calculated as mean of "
+       "maximum and mimimum value of the pads or smds origin points. "
+       "The calculated value does not necessarily fit with the origin "
+       "point of the part in the layout."
+       "All elements populated in currently set assembly variant are considered."
+       "<p>"
+       "The syntax of the output data looks like this:"
+       "<p>"
+       "<tt>name;value;package;x-coord;y-coord;rotation</tt>"
+       "<p>"
+       "<author>Author:<b> Cadsoft, Hartung</b></author>"
+
+// History:
+// 2013-06-29: Initial version based on Cadsoft script
+
+if (board) board(B) {
+
+  // Get filename
+  string fileName = dlgFileSave("Save File", filesetext(B.name, ".mnt"), "*.mnt");
+  if (fileName == "") exit(0);
+
+  output(fileName) {
+
+   B.elements(E) if (E.populate) {
+
+     int xmax =-2147483648,
+         xmin = 2147483647,
+         ymax = xmax,
+         ymin = xmin;
+
+       E.package.contacts(C) {
+
+         if (C.x > xmax) xmax = C.x;
+         if (C.y > ymax) ymax = C.y;
+         if (C.x < xmin) xmin = C.x;
+         if (C.y < ymin) ymin = C.y;  }
+
+
+       printf("%s;%s;%s;%5.2f;%5.2f;%3.0f; \n",
+             E.name, E.value, E.package.name, u2mm((xmin + xmax)/2), u2mm((ymin + ymax)/2),
+             E.angle);
+			 
+		// E.attribute("REMARK") für ein Attribute ausgeben z.B. Teilenummer
+    }
+  }
+}
+
+else {
+   dlgMessageBox("\n    Start this ULP in a Board    \n");
+   exit (0);
+}

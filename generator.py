@@ -1,8 +1,8 @@
 from Part import *
-from yy1 import nozzle
+from yy1 import nozzle, Machine
 
 class Generator:
-    def __init__(self, partlist):
+    def __init__(self, partlist, nozzle_changes):
         self.machine = 'YY1'
 
         self.panelized_length = 0
@@ -15,18 +15,17 @@ class Generator:
         self.overall_offset_x = 0
         self.overall_offset_y = 0
 
-        self.NozzleChange = []
         self.parts = partlist
 
-        c1 = nozzle()
-        c1.use = False
-        c1.component = 1
-        c1.drop_station = 1
-        c1.pick_station = 1
-        self.NozzleChange.append(c1)
-        self.NozzleChange.append(c1)
-        self.NozzleChange.append(c1)
-        self.NozzleChange.append(c1)
+        self.NozzleChange = nozzle_changes
+
+        while len(self.NozzleChange) != 4:
+            c1 = nozzle()
+            c1.use = False
+            c1.component = 1
+            c1.drop_station = 1
+            c1.pick_station = 1
+            self.NozzleChange.append(c1)
 
     def generate(self, path, name):
         f = open(name+".csv", "w")

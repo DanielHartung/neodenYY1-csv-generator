@@ -2,6 +2,7 @@
 
 # Press Umschalt+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import Part
 from generator import *
 from Part import *
 from yy1 import *
@@ -11,30 +12,23 @@ if __name__ == '__main__':
     #generate machine class with all Feeders
     machine = Machine()
     #generate Parts class with all Parts
-    eaglef = EagleFile("SmartCity.mnt")
+    fusionfile = FusionFile("SmartCity.mnt")
     #check if machine has the related parts
+    machine.generate_placeable_partlist(fusionfile.part_list())
 
+    placeable_parts = machine.get_placeable_parts()
+    nozzle_changes = machine.get_nozzle_changes()
 
-    partlist = []
-    for p in eaglef.parts:
-        part = YY1Part()
-        part.designator = p.partname
-        part.comment = p.value
-        part.footprint = p.body
-        part.mid_x = p.pos_x
-        part.mid_y = p.pos_y
-        part.rotation = p.rotation
-        part.head = 1
-        part.feeder = 1
-        part.speed = 100
-        part.pick_high = 0
-        part.place_high = 0
-        part.mode = 1
-        part.skip = False
-        partlist.append(part)
+    print('No parts: '+str(len(fusionfile.parts)))
+    print('placeable parts: '+str(len(placeable_parts)))
 
-    g = Generator(partlist)
-    g.verify_parts(machine, eaglef)
-    #g.generate("","SmartBin")
+    print('Following parts are not placeable:')
+    for part in fusionfile.part_list():
+        if not part.placeable:
+            print(part.name +' '+part.value+' '+part.package)
+
+    g = Generator(placeable_parts, nozzle_changes)
+    g.generate("","SmartBin")
+    #print("Generation completed")
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
