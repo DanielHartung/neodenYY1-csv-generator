@@ -12,7 +12,7 @@ if __name__ == '__main__':
     #generate machine class with all Feeders
     machine = Machine()
     #generate Parts class with all Parts
-    fusionfile = FusionFile("SmartCity.mnt")
+    fusionfile = FusionFile("SmartBin v22.mnt")
     #check if machine has the related parts
     machine.generate_placeable_partlist(fusionfile.part_list())
 

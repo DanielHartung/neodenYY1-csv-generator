@@ -1,12 +1,14 @@
-from Part import unit_norminal, YY1Part, prenum
+from Part import unit_norminal, YY1Part, prenum, Part
 import re
 
 typing_list = ['resistor',
                'capacitor']
 
 class nozzle:
+    'use'
     use = False
     component = 0
+    'Head of yy1 1 or 2'
     head = 1
     drop_station = 0
     pick_station = 0
@@ -82,11 +84,12 @@ class Machine:
         yy1part.mid_x = part.pos_x
         yy1part.mid_y = part.pos_y
         yy1part.rotation = part.rotation
-        yy1part.head = feeder.part_nozzle
+        yy1part.nozzle = feeder.part_nozzle
+        yy1part.head = 1
         yy1part.feeder = feeder.id
         yy1part.speed = feeder.part_speed
         yy1part.pick_high = feeder.part_height
-        yy1part.place_high = 0
+        yy1part.place_high = feeder.part_height
         yy1part.mode = feeder.part_mode
         yy1part.skip = placeable
 
@@ -101,6 +104,7 @@ class Machine:
         4. Set the used head alternately for double the placing for the first nozzle
         5. Set the switch for the nozzle for the part that uses other nozzels
         '''
+        dummy_nozzle_change = False
         #check each part
         #1
         for part in parts:
@@ -114,16 +118,16 @@ class Machine:
                     part.placeable = True
                     break
 
-        #2
+        #2 Sort for Feeder
         self.placeable_parts.sort(key=lambda x: x.feeder)
-        #3
-        self.placeable_parts.sort(key=lambda x: x.head)
+        #3 Sort for Nozzle
+        self.placeable_parts.sort(key=lambda x: x.nozzle)
 
         #4
         current_head = 1
         for part in self.placeable_parts:
-            if part.head == 1:
-                part.head = current_head
+            if part.nozzle == '1':
+                part.head = str(current_head)
                 current_head = current_head + 1
 
                 if current_head > 2:
@@ -134,12 +138,40 @@ class Machine:
         current_component = 0
         for part in self.placeable_parts:
             current_component = current_component + 1
-            if part.head != str(current_nozzle):
+            if part.nozzle != str(current_nozzle):
+                dummy_nozzle_change = True
+
                 nz = nozzle()
                 nz.use = True
                 nz.head = 1
-                nz.drop_station = 3
-                nz.pick_station = 1
+                nz.drop_station = current_nozzle
+                nz.pick_station = part.nozzle
                 nz.component = current_component
                 self.nozzle_changes.append(nz)
-                current_nozzle = part.head
+                current_nozzle = part.nozzle
+
+        if dummy_nozzle_change:
+            dummypart = Part()
+            dummyfeeder = Feeder()
+
+            dummypart.name = "Dummy"
+            dummypart.pos_x = 50.0
+            dummypart.pos_y = 10.0
+            dummypart.value = 0
+
+            dummyfeeder.id = 99
+            dummyfeeder.part_height = 10
+            dummyfeeder.part_value = 0
+            dummyfeeder.part_nozzle = 1
+            dummyfeeder.part_speed = 50
+            dummyfeeder.part_mode = 0
+            self.create_placement(dummypart, dummyfeeder, True)
+
+            ## create nozzle change for dummy
+            nz = nozzle()
+            nz.use = True
+            nz.head = 1
+            nz.drop_station = current_nozzle
+            nz.pick_station = 1 #TODO: Nozzle change check correct position
+            nz.component = current_component
+            self.nozzle_changes.append(nz)

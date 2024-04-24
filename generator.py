@@ -19,7 +19,7 @@ class Generator:
 
         self.NozzleChange = nozzle_changes
 
-        while len(self.NozzleChange) != 4:
+        while len(self.NozzleChange) < 4:
             c1 = nozzle()
             c1.use = False
             c1.component = 1

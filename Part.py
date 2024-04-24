@@ -168,6 +168,7 @@ class YY1Part:
     mid_y = 17.68
     rotation = -90.0
     head = 1
+    nozzle = 1
     feeder = 0      #0 = no feeder assigned
     speed = 100
     pick_high = 0
