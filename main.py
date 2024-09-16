@@ -2,17 +2,18 @@
 
 # Press Umschalt+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-import Part
-from generator import *
-from Part import *
-from yy1 import *
+from generator import Generator
+from Part import FusionFile
+from yy1 import Machine
+
+DEBUG = True
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     #generate machine class with all Feeders
-    machine = Machine()
+    machine = Machine('machine.csv')
     #generate Parts class with all Parts
-    fusionfile = FusionFile("SmartBin v22.mnt")
+    fusionfile = FusionFile("SmartBin v30.mnt")
     #check if machine has the related parts
     machine.generate_placeable_partlist(fusionfile.part_list())
 
@@ -30,5 +31,3 @@ if __name__ == '__main__':
     g = Generator(placeable_parts, nozzle_changes)
     g.generate("","SmartBin")
     #print("Generation completed")
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

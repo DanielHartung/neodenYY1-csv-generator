@@ -1,5 +1,8 @@
+#from main import DEBUG
 from Part import unit_norminal, YY1Part, prenum, Part
 import re
+
+DEBUG = True
 
 typing_list = ['resistor',
                'capacitor']
@@ -39,8 +42,8 @@ class Machine:
     placeable_parts = []
     nozzle_changes = []
 
-    def __init__(self):
-        self.read_machine_file('machine.csv')
+    def __init__(self, filename):
+        self.read_machine_file(filename)
 
     def get_placeable_parts(self):
         return self.placeable_parts
@@ -49,6 +52,8 @@ class Machine:
         return self.nozzle_changes
 
     def read_machine_file(self, file):
+        if DEBUG:
+            print('######### Read Machine file ###############')
         file1 = open(file, 'r')
         Lines = file1.readlines()
 
@@ -71,7 +76,13 @@ class Machine:
                 feeder.part_speed = result[6]
                 feeder.part_mode = result[7]
                 #feeder.part_comment = result[8]
-                self.feeders.append(feeder)
+                if feeder.part_name:
+                    if DEBUG == True:
+                        print(f'add Feeder: {feeder.id} Part: {feeder.part_name} Value: {feeder.part_value}')
+                    self.feeders.append(feeder)
+
+        if DEBUG:
+            print('######### Machine file readed ###############')
 
     def write_machine_file(self):
         pass
@@ -94,6 +105,14 @@ class Machine:
         yy1part.skip = placeable
 
         self.placeable_parts.append(yy1part)
+
+    def find_feeder(self, value, package):
+        for feeder in self.feeders:
+            #check value and package
+            if str(feeder.part_nvalue) == str(value) and feeder.part_package == package:
+                return feeder        
+        
+        return None
 
     def generate_placeable_partlist(self, parts):
         '''

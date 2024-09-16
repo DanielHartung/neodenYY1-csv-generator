@@ -10,6 +10,22 @@ The script will then do the following steps:
 - check which componets are on the machine and which are required  
 - generate the csv file for yy1 machine  
 
+## Workflow  
+```plantuml
+@startuml
+start
+partition machine {
+:read machine data;
+:read machine file;
+}
+:read parts data;
+:generate placeable partlist;
+:optimize partlist;
+:generate placefile;
+end
+@enduml
+```
+
 # machine.csv  
 This file contains all the components of the parts on the yy1 machine:  
 - id: feeder id where the part is located  

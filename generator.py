@@ -1,4 +1,4 @@
-from Part import *
+#from Part import parts
 from yy1 import nozzle, Machine
 
 class Generator:
@@ -27,8 +27,8 @@ class Generator:
             c1.pick_station = 1
             self.NozzleChange.append(c1)
 
-    def generate(self, path, name):
-        f = open(name+".csv", "w")
+    def generate(self, filepath):
+        f = open(filepath, "w")
         f.write("NEODEN,YY1,P&P FILE,,,,,,,,,,,\n")
         f.write(",,,,,,,,,,,,,\n")
         f.write("PanelizedPCB,UnitLength,"+str(self.panelized_length)+",")
@@ -89,41 +89,3 @@ class Generator:
 
 
         f.close()
-
-    #partlist = []
-    #for p in eaglef.parts:
-    #    part = Part()
-    #    part.designator = p.partname
-    #    part.comment = p.value
-    #    part.footprint = p.body
-    #    part.mid_x = p.pos_x
-    #    part.mid_y = p.pos_y
-    #    part.rotation = p.rotation
-    #    part.head = 1
-    #    part.feeder = 1
-    #    part.speed = 100
-    #    part.pick_high = 0
-    #    part.place_high = 0
-    #    part.mode = 1
-    #    part.skip = False
-    #    partlist.append(part)
-
-    def verify_parts(self, machine: Machine, parts: EaglePart):
-        '''
-        verify if the parts are available on the machine
-        :param machine: machine object containing the feeder information
-        :param parts: placment parts from the file
-        :return:
-        '''
-
-        for part in self.parts:
-            # check value
-            for feeder in machine.parts:
-                if part.name == feeder.part_name:
-                    print('name match')
-
-            # check check package
-
-        # check name
-
-

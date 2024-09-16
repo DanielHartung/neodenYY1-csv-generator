@@ -1,8 +1,9 @@
 import re
+DEBUG = True
 
 class prenum:
     '''
-    number wit prefix
+    number with prefix
     '''
     num = 0
     multi = 0
@@ -232,6 +233,8 @@ class FusionFile:
         return self.parts
 
     def parse(self, path):
+        if DEBUG:
+            print('############ Start parsing Fusion File ##############')
         file1 = open(path, 'r')
         Lines = file1.readlines()
 
@@ -254,6 +257,9 @@ class FusionFile:
                 self.parts.append(part)
             else:
                 print('Part: '+line+' information missing')
+
+        if DEBUG:
+            print('############ parsing Fusion File done ##############')
 
 
 class EagleFile:
