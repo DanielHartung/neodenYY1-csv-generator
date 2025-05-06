@@ -40,7 +40,7 @@ This file contains all the components of the parts on the yy1 machine:
 
 # Generator  
 
-# Placement list
+# Placement list  
 All Parts and the placement data should be in a comma separated file.  
 For Fusion 360 there is a ulp inside of the repo.  
 
@@ -49,8 +49,21 @@ Name, Value, Package, xpos, ypos, angle
 ```
 R1,20k,C0805,12.05,08.65,90
 ```
-## verify parts agains machine parts  
+## Verify parts agains machine parts  
 to place the correct parts on the board some variables should be compared to place the right parts  
 - part_name: is it a **R**esistor or a **C**apacitor  
 - part_value: is it the right value 10k  
 - part_package: is it the right package **0805** or **1205**
+
+
+# Install  
+- You need Python 3.6+
+- `python -m pip install -r requirements.txt` or `pip install -r requirementst.txt`
+
+# Execute  
+- `python main.py`
+
+# Others  
+Check example screenshot: ![]example screenshot(Docs/example_data_processor.jpg "example screenshot")
+
+

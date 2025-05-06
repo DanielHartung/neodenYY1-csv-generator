@@ -21,7 +21,7 @@ class PickAndPlaceApp(ctk.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         # MNT-Datei laden Button
-        self.load_button = ctk.CTkButton(self, text="MNT Datei laden", command=self.load_mnt_file)
+        self.load_button = ctk.CTkButton(self, text="Load MNT file", command=self.load_mnt_file)
         self.load_button.pack(pady=20, anchor="n")
 
         # Haupt-Frame für Tabelle und Scrollbar erstellen
