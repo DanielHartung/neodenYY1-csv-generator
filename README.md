@@ -1,16 +1,33 @@
-# Important info  
-At the moment i focus on using Eagle mount files for the script and a csv file for the machine data.
+# Neoden YY1 CSV Generator
 
-# Neoden YY1 CSV Generator  
-Goal of this Pyton script should be to generate the csv file for a Neoden YY1 Pick and Place machine.  
-TO reach the goal the idea is to have a csv file with all the parts that are one the machine.  
-The script will then do the following steps:  
-- read all the parts in from the mount file (at the moment Eagle/Fusion360)  
-- read all the parts from the machine file  
-- check which componets are on the machine and which are required  
-- generate the csv file for yy1 machine  
+This Python project generates a placement CSV file for the Neoden YY1 Pick and Place machine. It takes a mount file (e.g., from Eagle or Fusion 360) and a machine configuration CSV, matches the required parts with the available feeders, and outputs a ready-to-use file for the YY1.
 
-## Workflow  
+## Features
+
+- Reads parts from a mount file (Eagle/Fusion 360)
+- Reads machine configuration from a CSV file
+- Checks which components are available on the machine and which are required for the project
+- Generates a placement CSV file for the YY1
+- Reports parts that cannot be placed
+
+## Usage
+
+Python 3 is required. No external dependencies.
+
+```sh
+python main.py --file <mountfile.mnt> --machine <machine.csv>
+```
+
+Example:
+
+```sh
+python main.py --file "project.mnt" --machine "machine.csv"
+```
+
+The generated file will be placed in the `output/` directory.
+
+## Workflow
+
 ```plantuml
 @startuml
 start
@@ -26,31 +43,44 @@ end
 @enduml
 ```
 
-# machine.csv  
-This file contains all the components of the parts on the yy1 machine:  
-- id: feeder id where the part is located  
-- part_name: Name of the part  
-- part_value = Vakue of the part  
-- part_package = package of the part  
-- part_height = hight of the part  
-- part_nozzle = Nozzle name that should be used  
-- part_speed = Speed in percet for placing the part  
-- part_mode = Placement mode for the part  
-- part_comment = Free comment filed
+## machine.csv Format
 
-# Generator  
+| id | part_name | part_value | part_package | part_height | part_nozzle | part_speed | part_mode | part_comment |
+|----|-----------|------------|--------------|-------------|-------------|------------|-----------|-------------|
+| 1  | resistor  | 10k        | R0805        | 1.5         | 1           | 80         | 1         | optional     |
 
-# Placement list
-All Parts and the placement data should be in a comma separated file.  
-For Fusion 360 there is a ulp inside of the repo.  
+- **id**: Feeder ID
+- **part_name**: Part type (e.g., resistor, capacitor)
+- **part_value**: Value (e.g., 10k)
+- **part_package**: Package (e.g., R0805)
+- **part_height**: Height in mm
+- **part_nozzle**: Nozzle number
+- **part_speed**: Placement speed (%)
+- **part_mode**: Placement mode
+- **part_comment**: Free comment
 
-## Example of the file  
-Name, Value, Package, xpos, ypos, angle
+## Mount File Example (Eagle/Fusion 360)
+
 ```
 R1,20k,C0805,12.05,08.65,90
 ```
-## verify parts agains machine parts  
-to place the correct parts on the board some variables should be compared to place the right parts  
-- part_name: is it a **R**esistor or a **C**apacitor  
-- part_value: is it the right value 10k  
-- part_package: is it the right package **0805** or **1205**
+
+| Name | Value | Package | xpos | ypos | angle |
+|------|-------|---------|------|------|-------|
+
+## Part Matching
+
+To ensure correct placement, the following fields are compared:
+
+- **part_name**: e.g., R (resistor) or C (capacitor)
+- **part_value**: e.g., 10k
+- **part_package**: e.g., 0805, 1206
+
+## Additional Info
+
+- Parts not available on the machine are listed in the output.
+- For Fusion 360, a ULP script for export is included in the repo.
+
+---
+
+Feel free to contribute or open an issue if you have questions or suggestions!
