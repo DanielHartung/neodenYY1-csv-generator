@@ -2,6 +2,26 @@ import re
 DEBUG = True
 
 class prenum:
+    """
+    Represents a number with an SI prefix (e.g., kilo, mega, milli).
+    This class parses a string representing a number with an optional SI prefix,
+    normalizes the number to a base value with an associated exponent (multiple of 3),
+    and provides string representation and access to the numeric value and prefix.
+    Attributes:
+        num (int): The normalized base number (rounded to integer).
+        multi (int): The exponent corresponding to the SI prefix (e.g., 3 for 'k', -3 for 'm').
+    Methods:
+        __init__(number: str):
+            Initializes the prenum object by parsing and normalizing the input string.
+        __str__():
+            Returns a string representation of the number with its SI prefix.
+        get_number():
+            Returns the normalized base number.
+        get_prefix():
+            Returns the exponent corresponding to the SI prefix.
+        simplyfiy(value: str):
+            Parses and normalizes the input string, extracting the numeric value and SI prefix.
+    """
     '''
     number with prefix
     '''
@@ -9,7 +29,7 @@ class prenum:
     multi = 0
 
     def __init__(self, number:str):
-        self.simplyfiy(number)
+        self.simplify(number)
 
     def __str__(self):
         prefix = ''
@@ -32,14 +52,41 @@ class prenum:
         return(str(self.num)+prefix)
 
     def get_number(self):
+        """
+        Returns the number associated with this part.
+
+        Returns:
+            int: The number of the part.
+        """
         return self.num
 
     def get_prefix(self):
+        """
+        Returns the prefix associated with the part.
+
+        Returns:
+            str: The value of the 'multi' attribute, representing the prefix.
+        """
         return self.multi
-    def simplyfiy(self, value:str):
+    
+    def simplify(self, value: str):
+        """
+        Simplifies a string representation of a value with an optional SI unit prefix into a normalized numeric value and its corresponding exponent multiplier.
+        The method parses the input string `value`, which may contain a number followed by an optional SI prefix (e.g., 'k', 'M', 'm', 'u', etc.), and normalizes the number to be within the range [1, 1000). It also calculates the exponent multiplier (`self.multi`) based on the SI prefix and normalization steps.
+        Args:
+            value (str): The string representation of the value to simplify (e.g., '4.7k', '100u', '0.01M').
+        Side Effects:
+            Sets `self.num` to the normalized integer value.
+            Sets `self.multi` to the exponent multiplier corresponding to the SI prefix and normalization.
+        Returns:
+            float: The normalized numeric value if no SI prefix is present, otherwise None.
+        Notes:
+            - Recognized SI prefixes: G (giga), M (mega), k (kilo), m (milli), µ/u/Â (micro), n (nano), p (pico).
+            - If the input cannot be parsed, prints an error message.
+        """
         self.multi = 0
 
-        result = re.search('^(\d+\.?,?\d*)(\D?)', value)
+        result = re.search(r'^(\d+\.?,?\d*)(\D?)', value)
 
         if result:
             num = result[1]
@@ -48,7 +95,7 @@ class prenum:
             prefix = result[2]
             num = float(num)
 
-            #nominize
+            # normalize
             if num != 0:
                 while num < 1:
                     num = num * 1000
@@ -71,7 +118,6 @@ class prenum:
             # kilo
             elif 'k' in prefix:
                 self.multi = self.multi + 3
-
             # milli
             elif 'm' in prefix:
                 self.multi = self.multi - 3
@@ -81,12 +127,12 @@ class prenum:
             # nano
             elif 'n' in prefix:
                 self.multi = self.multi - 9
-            # piko
+            # pico
             elif 'p' in prefix:
                 self.multi = self.multi - 12
 
         else:
-            print("can't simplyfiy "+value)
+            print("can't simplify " + value)
 
 def unit_norminal(value:str):
 
@@ -263,24 +309,37 @@ class FusionFile:
 
 
 class EagleFile:
+    """
+    The EagleFile class is responsible for parsing a file containing part information, 
+    typically exported from EAGLE PCB design software. It reads the file line by line, 
+    extracts part attributes using a regular expression, and stores each part as an 
+    EaglePart object in the parts list.
+    Attributes:
+        parts (list): A list that stores EaglePart objects parsed from the file.
+    Methods:
+        __init__(path): Initializes the EagleFile object and parses the specified file.
+        parse(file): Reads the file, parses each line for part information, and appends 
+                     EaglePart objects to the parts list.
+    """
     parts = []
 
     def __init__(self, path):
         self.parse(path)
 
     def parse(self, file):
-        file1 = open(file, 'r')
-        Lines = file1.readlines()
-
-        for line in Lines:
-            result = re.search(r"(\S+)\s+(\S+)\s+(\S+)\s(\S+)\s+(\S+)\s(.*)", line)
-
-            if(result):
-                part = EaglePart()
-                part.partname = result.group(1)
-                part.pos_x = result.group(2)
-                part.pos_y = result.group(3)
-                part.rotation = result.group(4)
-                part.value = result.group(5)
-                part.body = result.group(6)
-                self.parts.append(part)
+        with open(file, 'r') as file1:
+            for line in file1:
+                # TODO Use a more robust regex to handle possible spaces and missing fields
+                result = re.match(r"(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)", line.strip())
+                if result:
+                    part = EaglePart()
+                    part.partname = result.group(1)
+                    part.pos_x = result.group(2)
+                    part.pos_y = result.group(3)
+                    part.rotation = result.group(4)
+                    part.value = result.group(5)
+                    part.body = result.group(6)
+                    self.parts.append(part)
+                else:
+                    if DEBUG:
+                        print(f"Line could not be parsed: {line.strip()}")

@@ -5,7 +5,7 @@ At the moment i focus on using Eagle mount files for the script and a csv file f
 Goal of this Pyton script should be to generate the csv file for a Neoden YY1 Pick and Place machine.  
 TO reach the goal the idea is to have a csv file with all the parts that are one the machine.  
 The script will then do the following steps:  
-- read all the parts in from the mount file (at the moment Eagle)  
+- read all the parts in from the mount file (at the moment Eagle/Fusion360)  
 - read all the parts from the machine file  
 - check which componets are on the machine and which are required  
 - generate the csv file for yy1 machine  

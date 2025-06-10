@@ -28,64 +28,69 @@ class Generator:
             self.NozzleChange.append(c1)
 
     def generate(self, filepath):
-        f = open(filepath, "w")
-        f.write("NEODEN,YY1,P&P FILE,,,,,,,,,,,\n")
-        f.write(",,,,,,,,,,,,,\n")
-        f.write("PanelizedPCB,UnitLength,"+str(self.panelized_length)+",")
-        f.write("UnitWidth,"+str(self.panelized_width)+",")
-        f.write("Rows,"+str(self.panelized_rows)+",")
-        f.write("Columns,"+str(self.panelized_columns)+",\n")
-        f.write(",,,,,,,,,,,,,\n")
-        f.write("Fiducial,")
-        f.write("1-X,"+str(self.fiducial_x)+",")
-        f.write("1-Y,"+str(self.fiducial_y)+",")
-        f.write("OverallOffsetX,"+str(self.overall_offset_x)+",")
-        f.write("OverallOffsetY,"+str(self.overall_offset_y)+",\n")
-        f.write(",,,,,,,,,,,,,\n")
+        """
+        Generates a CSV file for the Neoden YY1 pick-and-place machine configuration.
+        The generated file includes header information, panelized PCB settings, fiducial data,
+        nozzle change instructions, and a list of parts with their placement parameters.
+        Args:
+            filepath (str): The path to the output CSV file.
+        The function writes the following sections to the file:
+            - General header and empty lines for formatting.
+            - Panelized PCB configuration (length, width, rows, columns).
+            - Fiducial and overall offset information.
+            - Nozzle change instructions (up to 4 changes; prints a warning if exceeded).
+            - Parts list with placement details for each part.
+        Raises:
+            Prints a warning if more than 4 nozzle changes are specified.
+        """
+        with open(filepath, "w") as f:
+            f.write("NEODEN,YY1,P&P FILE,,,,,,,,,,,\n")
+            f.write(",,,,,,,,,,,,,\n")
+            f.write(f"PanelizedPCB,UnitLength,{self.panelized_length},UnitWidth,{self.panelized_width},Rows,{self.panelized_rows},Columns,{self.panelized_columns},\n")
+            f.write(",,,,,,,,,,,,,\n")
+            f.write(f"Fiducial,1-X,{self.fiducial_x},1-Y,{self.fiducial_y},OverallOffsetX,{self.overall_offset_x},OverallOffsetY,{self.overall_offset_y},\n")
+            f.write(",,,,,,,,,,,,,\n")
 
         ####################################
         # Nozzle Change                    #
         ####################################
-        if len(self.NozzleChange) > 4:
-            print("Too much nozzle changes")
+            if len(self.NozzleChange) > 4:
+                print("Too many nozzle changes")
 
-        for change in self.NozzleChange:
-            f.write("NozzleChange,")
-            if change.use:
-                f.write("ON,")
-            else:
-                f.write("OFF,")
+            for change in self.NozzleChange:
+                status = "ON" if change.use else "OFF"
+                line = [
+                "NozzleChange",
+                status,
+                f"BeforeComponent,{change.component}",
+                f"Head{change.head}",
+                f"Drop,Station{change.drop_station}",
+                f"PickUp,Station{change.pick_station}",
+                ""
+                ]
+                f.write(",".join(line) + "\n")
 
-            f.write("BeforeComponent,"+str(change.component)+",")
-            f.write("Head"+str(change.head)+",")
-            f.write("Drop,Station"+str(change.drop_station)+",")
-            f.write("PickUp,Station"+str(change.pick_station)+",")
-            f.write("\n")
-
-        f.write(",,,,,,,,,,,,,\n")
+            f.write(",,,,,,,,,,,,,\n")
         ####################################
         # Parts                            #
         ####################################
-        f.write("Designator,Comment,Footprint,Mid X(mm),Mid Y(mm) ,Rotation,Head ,FeederNo,Mount Speed(%),Pick Height(mm),Place Height(mm),Mode,Skip\n")
-        for part in self.parts:
-            f.write(str(part.designator) + ",")
-            f.write(str(part.comment) + ",")
-            f.write(str(part.footprint) + ",")
-            f.write(str(part.mid_x) + ",")
-            f.write(str(part.mid_y) + ",")
-            f.write(str(part.rotation) + ",")
-            f.write(str(part.head) + ",")
-            f.write(str(part.feeder) + ",")
-            f.write(str(part.speed) + ",")
-            f.write(str(part.pick_high) + ",")
-            f.write(str(part.place_high) + ",")
-            f.write(str(part.mode) + ",")
-            if(part.skip):
-                f.write("0")
-            else:
-                f.write("1")
+            f.write("Designator,Comment,Footprint,Mid X(mm),Mid Y(mm) ,Rotation,Head ,FeederNo,Mount Speed(%),Pick Height(mm),Place Height(mm),Mode,Skip\n")
+            for part in self.parts:
+                fields = [
+                part.designator,
+                part.comment,
+                part.footprint,
+                part.mid_x,
+                part.mid_y,
+                part.rotation,
+                part.head,
+                part.feeder,
+                part.speed,
+                part.pick_high,
+                part.place_high,
+                part.mode,
+                "0" if part.skip else "1"
+                ]
+                f.write(",".join(str(field) for field in fields) + "\n")
 
-            f.write("\n")
-
-
-        f.close()
+            f.close()
