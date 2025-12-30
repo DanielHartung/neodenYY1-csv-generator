@@ -8,28 +8,51 @@ typing_list = ['resistor',
                'capacitor']
 
 class nozzle:
-    'use'
-    use = False
-    component = 0
-    'Head of yy1 1 or 2'
-    head = 1
-    drop_station = 0
-    pick_station = 0
+    """
+    Represents a nozzle of the machine.
 
+    Attributes:
+        use (bool): Indicates whether the nozzle is in use.
+        component (int): The component assigned to the nozzle.
+        head (int): The head number the nozzle is attached to.
+        drop_station (int): The drop station assigned to the nozzle.
+        pick_station (int): The pick station assigned to the nozzle.
+    """
+    """Düse einer Maschine."""
     def __init__(self):
-        pass
+        self.use = False
+        self.component = 0
+        self.head = 1
+        self.drop_station = 0
+        self.pick_station = 0
 
 class Feeder:
-    id = 0
-    part_name = str('None')
-    part_value = str('None')
-    part_nvalue = 0.0
-    part_package = str('None')
-    part_height = str('None')
-    part_nozzle = str('None')
-    part_speed = str('None')
-    part_mode = str('None')
-    part_comment = str('None')
+    """
+    Represents a feeder for a pick-and-place machine, holding information about the part to be placed.
+
+    Attributes:
+        id (int): Unique identifier for the feeder.
+        part_name (str): Name of the part.
+        part_value (str): Value or type of the part (e.g., resistor value).
+        part_nvalue (float): Numeric value of the part, if applicable.
+        part_package (str): Package type of the part (e.g., 0805, SOT-23).
+        part_height (str): Height of the part.
+        part_nozzle (str): Nozzle type required for placement.
+        part_speed (str): Placement speed setting.
+        part_mode (str): Placement mode.
+        part_comment (str): Additional comments or notes about the part.
+    """
+    def __init__(self):
+        self.id = 0
+        self.part_name = 'None'
+        self.part_value = 'None'
+        self.part_nvalue = 0.0
+        self.part_package = 'None'
+        self.part_height = 'None'
+        self.part_nozzle = 'None'
+        self.part_speed = 'None'
+        self.part_mode = 'None'
+        self.part_comment = 'None'
 
 class Machine:
     '''
